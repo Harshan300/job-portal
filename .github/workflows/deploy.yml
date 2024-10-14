@@ -12,13 +12,13 @@ jobs:
 
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3  # This checks out the repository code
+        uses: actions/checkout@v3  
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build Docker image
-        run: docker build -t harshan536/react-app .  # Change to your Docker Hub repo
+        run: docker build -t harshan536/react-app . 
 
       - name: Push Docker image
-        run: docker push harshan536/react-app  # Change to your Docker Hub repo
+        run: docker push harshan536/react-app  
