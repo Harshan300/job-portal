@@ -26,11 +26,13 @@ jobs:
       - name: SSH into EC2 and Deploy
         uses: appleboy/ssh-action@v0.1.5
         with:
-          host: ${{ secrets.EC2_INSTACNE_IP }}
+          host: ${{ secrets.EC2_INSTANCE_IP }}  # Corrected secret name
           username: ubuntu 
           key: ${{ secrets.SSH_KEYS }}
           script: |
-            sudo systemctl start docker
-            docker pull ${{ secrets.DOCKER_USERNAME }}/react-app
+            sudo apt-get install -y docker.io  # Added -y to automate installation
+            sudo systemctl start docker          # Start Docker service if not running
+            sudo systemctl enable docker         # Enable Docker service to start on boot
+            docker pull harshan536/react-app
             docker stop $(docker ps -q) || true
-            docker run -d -p 3001:3000 ${{ secrets.DOCKER_USERNAME }}/react-app
+            docker run -d -p 3000:3000 harshan536/react-app  # Removed extra period
