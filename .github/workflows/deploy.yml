@@ -22,21 +22,17 @@ jobs:
 
       - name: Push Docker image
         run: docker push harshan536/react-app
-deploy:
-  needs: build-and-push
-  runs-on: self-hosted
-  steps:
-    - name: Login to Docker Hub
-      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Pull image from Docker Hub
-      run: docker pull harshan536/react-app:latest 
-
-    - name: Stop and remove existing container (if running)
-      run: |
-        docker stop affectionate_shannon || true
-        docker rm affectionate_shannon || true
-
-    - name: Run new Docker container
-      run: docker run -d -p 5000:3000 --name affectionate_shannon harshan536/react-app
+  deploy:
+    needs: build-and-push
+    runs-on: self-hosted
+    steps:
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Pull image from docker hub
+        run: docker pull harshan536/react-app:latest
+      - name: remove existing container
+        run: docker rm -f affectionate_shannon
+      - name: Run docker container
+        run: docker run -d -p 3000:3000 --name react-app-container harshan536/react-app
 
