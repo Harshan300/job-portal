@@ -22,3 +22,15 @@ jobs:
 
       - name: Push Docker image
         run: docker push harshan536/react-app  
+      
+      - name: SSH into EC2 and Deploy
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.EC2_INSTANCE_IP }}
+          username: ubuntu  # Your EC2 instance username
+          key: ${{ secrets.SSH }}
+          script: |
+            sudo systemctl start docker
+            docker pull ${{ secrets.DOCKER_USERNAME }}/react-app
+            docker stop $(docker ps -q) || true
+            docker run -d --restart unless-stopped -p 80:80 ${{ secrets.DOCKER_USERNAME }}/react-app
