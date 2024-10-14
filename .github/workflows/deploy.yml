@@ -32,7 +32,7 @@ jobs:
       - name: Pull image from docker hub
         run: docker pull harshan536/react-app:latest
       - name: remove existing container
-        run: docker stop reverent_feistel docker rm reverent_feistel
+        run: docker stop reverent_feistel && docker rm reverent_feistel
       - name: Run docker container
         run: docker run -d -p 3000:3000 --name react-app-container harshan536/react-app
 
